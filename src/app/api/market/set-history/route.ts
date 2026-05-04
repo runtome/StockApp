@@ -48,5 +48,5 @@ export async function GET(request: Request) {
   }
 
   // Fallback: synthetic history based on mock SET index value
-  return NextResponse.json({ range, data: syntheticHistory(days, 1382.45) });
+  return NextResponse.json({ range, data: syntheticHistory(days, 1493.69) });
 }

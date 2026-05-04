@@ -2,7 +2,7 @@ import type { MarketSummary } from "@/lib/types/market";
 import { MOCK_STOCKS } from "./stocks";
 
 export const MOCK_MARKET_SUMMARY: MarketSummary = {
-  set_index: { value: 1382.45, change: 8.32, pct: 0.61 },
+  set_index: { value: 1493.69, change: 3.21, pct: 0.22 },
   advancers: 482,
   decliners: 241,
   unchanged: 60,
