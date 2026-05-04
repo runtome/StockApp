@@ -10,7 +10,9 @@ import Link from "next/link";
 const SECTORS = ["Energy", "Banking", "Transport", "ICT", "Commerce", "Health", "Property", "Food"];
 
 function StockRow({ stock }: { stock: Stock }) {
-  const isUp = stock.change_pct >= 0;
+  const price = stock.price ?? 0;
+  const changePct = stock.change_pct ?? 0;
+  const isUp = changePct >= 0;
   return (
     <Link href={`/stocks/${stock.symbol}`} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", textDecoration: "none" }}>
       <div style={{ flex: 1 }}>
@@ -19,8 +21,8 @@ function StockRow({ stock }: { stock: Stock }) {
       </div>
       <SparklineChart data={stock.sparkline ?? []} width={52} height={22} />
       <div style={{ textAlign: "right" }}>
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 600, color: "var(--color-ink)" }}>{stock.price.toFixed(2)}</div>
-        <Chip label={`${isUp ? "+" : ""}${stock.change_pct.toFixed(2)}%`} variant={isUp ? "up" : "down"} />
+        <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 600, color: "var(--color-ink)" }}>{price.toFixed(2)}</div>
+        <Chip label={`${isUp ? "+" : ""}${changePct.toFixed(2)}%`} variant={isUp ? "up" : "down"} />
       </div>
     </Link>
   );
@@ -38,7 +40,8 @@ export default function SearchPage() {
       setLoading(true);
       try {
         const res = await fetch(`/api/stocks${query ? `?q=${encodeURIComponent(query)}` : ""}`);
-        setResults(await res.json());
+        const json = await res.json();
+        setResults(Array.isArray(json) ? json.filter((s) => s && typeof s.price === "number") : []);
       } catch {}
       setLoading(false);
     }, 300);

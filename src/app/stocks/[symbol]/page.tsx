@@ -30,7 +30,7 @@ export default async function StockDetailPage({ params }: Props) {
   const records: IndicatorRecord[] = (indicators.records ?? history) as IndicatorRecord[];
 
   const s = stock as Stock;
-  const isUp = s.change_pct >= 0;
+  const isUp = (s.change_pct ?? 0) >= 0;
 
   return (
     <AppShell>
@@ -59,11 +59,11 @@ export default async function StockDetailPage({ params }: Props) {
           </div>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontFamily: "var(--font-mono)", fontSize: 26, fontWeight: 700, color: "var(--color-ink)", letterSpacing: -0.5 }}>
-              {s.price.toFixed(2)}
+              {(s.price ?? 0).toFixed(2)}
             </div>
             <div style={{ display: "flex", gap: 6, justifyContent: "flex-end", marginTop: 4 }}>
-              <Chip label={`${isUp ? "+" : ""}${s.change.toFixed(2)}`} variant={isUp ? "up" : "down"} />
-              <Chip label={`${isUp ? "+" : ""}${s.change_pct.toFixed(2)}%`} variant={isUp ? "up" : "down"} />
+              <Chip label={`${isUp ? "+" : ""}${(s.change ?? 0).toFixed(2)}`} variant={isUp ? "up" : "down"} />
+              <Chip label={`${isUp ? "+" : ""}${(s.change_pct ?? 0).toFixed(2)}%`} variant={isUp ? "up" : "down"} />
             </div>
           </div>
         </div>
@@ -73,12 +73,12 @@ export default async function StockDetailPage({ params }: Props) {
           {[{ l: "O", v: s.open }, { l: "H", v: s.high }, { l: "L", v: s.low }, { l: "C", v: s.close }].map((item) => (
             <div key={item.l}>
               <div style={{ fontSize: 10, color: "var(--color-muted)", fontWeight: 600 }}>{item.l}</div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 500, color: "var(--color-ink2)" }}>{item.v.toFixed(2)}</div>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 500, color: "var(--color-ink2)" }}>{(item.v ?? 0).toFixed(2)}</div>
             </div>
           ))}
           <div style={{ marginLeft: "auto" }}>
             <div style={{ fontSize: 10, color: "var(--color-muted)", fontWeight: 600 }}>VOL</div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 500, color: "var(--color-ink2)" }}>{(s.volume / 1_000_000).toFixed(1)}M</div>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 500, color: "var(--color-ink2)" }}>{((s.volume ?? 0) / 1_000_000).toFixed(1)}M</div>
           </div>
         </div>
       </div>

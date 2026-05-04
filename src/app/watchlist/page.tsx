@@ -36,8 +36,8 @@ export default function WatchlistPage() {
           </div>
         ) : (
           <Card style={{ overflow: "hidden" }}>
-            {stocks.map((s, i) => {
-              const isUp = s.change_pct >= 0;
+            {stocks.filter((s) => s && typeof s.price === "number").map((s, i) => {
+              const isUp = (s.change_pct ?? 0) >= 0;
               return (
                 <div key={s.symbol}>
                   {i > 0 && <div style={{ height: 1, background: "var(--color-hairline2)", margin: "0 16px" }} />}
@@ -51,8 +51,8 @@ export default function WatchlistPage() {
                         <div style={{ fontSize: 11, color: "var(--color-muted)" }}>{s.name}</div>
                       </div>
                       <div style={{ textAlign: "right" }}>
-                        <div style={{ fontFamily: "var(--font-mono)", fontSize: 14, fontWeight: 600, color: "var(--color-ink)" }}>{s.price.toFixed(2)}</div>
-                        <Chip label={`${isUp ? "+" : ""}${s.change_pct.toFixed(2)}%`} variant={isUp ? "up" : "down"} />
+                        <div style={{ fontFamily: "var(--font-mono)", fontSize: 14, fontWeight: 600, color: "var(--color-ink)" }}>{(s.price ?? 0).toFixed(2)}</div>
+                        <Chip label={`${isUp ? "+" : ""}${(s.change_pct ?? 0).toFixed(2)}%`} variant={isUp ? "up" : "down"} />
                       </div>
                     </Link>
                     <button onClick={() => remove(s.symbol)} style={{ background: "none", border: "none", color: "var(--color-muted2)", cursor: "pointer", padding: 4 }}>
