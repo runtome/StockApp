@@ -11,9 +11,7 @@ import { MOCK_STOCKS } from "@/lib/mock/stocks";
 
 const MODELS: { id: ModelType; desc: string }[] = [
   { id: "XGBoost", desc: "Gradient boosting — fast, accurate on tabular data" },
-  { id: "LSTM", desc: "Neural network — captures long-term patterns" },
   { id: "Random Forest", desc: "Ensemble method — robust and interpretable" },
-  { id: "Prophet", desc: "Time-series decomposition — handles seasonality" },
   { id: "ARIMA", desc: "Statistical model — classical time series" },
 ];
 

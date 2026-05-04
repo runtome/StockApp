@@ -11,7 +11,7 @@ import type { ForecastResponse, ModelType } from "@/lib/types/forecast";
 import type { OHLCV } from "@/lib/types/stock";
 import Link from "next/link";
 
-const MODELS: ModelType[] = ["XGBoost", "LSTM", "Random Forest", "Prophet", "ARIMA"];
+const MODELS: ModelType[] = ["XGBoost", "Random Forest", "ARIMA"];
 const HISTORY_OPTIONS = [
   { label: "7D", days: 7 },
   { label: "14D", days: 14 },

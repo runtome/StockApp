@@ -1,4 +1,4 @@
-export type ModelType = "XGBoost" | "LSTM" | "Random Forest" | "Prophet" | "ARIMA";
+export type ModelType = "XGBoost" | "Random Forest" | "ARIMA";
 export type Direction = "Up" | "Slight Up" | "Sideways" | "Slight Down" | "Down";
 export type RiskTolerance = "low" | "medium" | "high";
 

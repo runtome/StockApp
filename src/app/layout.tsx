@@ -20,6 +20,8 @@ export const metadata: Metadata = {
     icon: "/icon.png",
     apple: "/icon.png",
   },
+  // Explicit charset ensures Thai characters render correctly across all browsers/CDNs
+  other: { charset: "utf-8" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
