@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PhoneFrame } from "@/components/layout/PhoneFrame";
+import { AppShell } from "@/components/layout/AppShell";
 import { useAuth } from "@/lib/context/AuthContext";
 import { apiLogin } from "@/lib/api/auth-api";
 
@@ -39,7 +39,7 @@ export default function LoginPage() {
   }
 
   return (
-    <PhoneFrame>
+    <AppShell>
       <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", padding: "0 24px" }}>
         {/* Header */}
         <div style={{ paddingTop: 56, paddingBottom: 32 }}>
@@ -101,6 +101,6 @@ export default function LoginPage() {
           </div>
         </form>
       </div>
-    </PhoneFrame>
+    </AppShell>
   );
 }

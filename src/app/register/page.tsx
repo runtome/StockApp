@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PhoneFrame } from "@/components/layout/PhoneFrame";
+import { AppShell } from "@/components/layout/AppShell";
 import { useAuth } from "@/lib/context/AuthContext";
 import { apiRegister } from "@/lib/api/auth-api";
 
@@ -62,8 +62,8 @@ export default function RegisterPage() {
     : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>;
 
   return (
-    <PhoneFrame>
-      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", padding: "0 24px", overflowY: "auto" }}>
+    <AppShell>
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", padding: "0 24px" }}>
         {/* Header */}
         <div style={{ paddingTop: 48, paddingBottom: 24 }}>
           <div style={{ width: 48, height: 48, borderRadius: 14, background: "var(--color-ai)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
@@ -148,6 +148,6 @@ export default function RegisterPage() {
           </div>
         </form>
       </div>
-    </PhoneFrame>
+    </AppShell>
   );
 }
