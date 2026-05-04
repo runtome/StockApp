@@ -105,7 +105,7 @@ export default function ForecastPage({ params }: { params: Promise<{ symbol: str
         {/* Header */}
         <div style={{ padding: "12px 20px 8px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--color-ai)", fontWeight: 600, letterSpacing: 0.4 }}>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 14.39 8.25 21 9.27l-4.78 4.66L17.27 21 12 17.77 6.73 21l1.05-7.07L3 9.27l6.61-1.02z" /></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>
             AI FORECAST · การคาดการณ์
           </div>
           <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.4, marginTop: 2, color: "var(--color-ink)" }}>{sym}</div>
