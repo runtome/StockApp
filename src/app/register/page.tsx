@@ -119,9 +119,9 @@ export default function RegisterPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 12, padding: "4px 0" }}>
             <Checkbox checked={terms} onChange={setTerms}>
               I have read and agree to the{" "}
-              <span style={{ color: "var(--color-ai)", fontWeight: 600 }}>Terms of Use</span>
+              <Link href="/terms" target="_blank" style={{ color: "var(--color-ai)", fontWeight: 600, textDecoration: "none" }}>Terms of Use</Link>
               {" "}and{" "}
-              <span style={{ color: "var(--color-ai)", fontWeight: 600 }}>Privacy Policy</span>
+              <Link href="/privacy" target="_blank" style={{ color: "var(--color-ai)", fontWeight: 600, textDecoration: "none" }}>Privacy Policy</Link>
               {" "}· ฉันยอมรับข้อกำหนดการใช้งาน <span style={{ color: "var(--color-down)" }}>*</span>
             </Checkbox>
             <Checkbox checked={cookies} onChange={setCookies}>
