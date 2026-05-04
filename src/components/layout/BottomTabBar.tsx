@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/lib/context/AuthContext";
 
 const tabs = [
   {
@@ -61,6 +62,7 @@ const tabs = [
 
 export function BottomTabBar() {
   const pathname = usePathname();
+  const { user } = useAuth();
 
   const isActive = (tab: typeof tabs[0]) => {
     if (tab.id === "forecast") return pathname.includes("/forecast");
@@ -79,6 +81,20 @@ export function BottomTabBar() {
         paddingBottom: 8,
       }}
     >
+      {/* Auth indicator — top-right corner of the tab bar */}
+      <Link href={user ? "/markets" : "/login"}
+        style={{ position: "absolute", top: 8, right: 10, display: "flex", alignItems: "center", gap: 5, textDecoration: "none" }}>
+        {user ? (
+          <div style={{ width: 26, height: 26, borderRadius: "50%", background: "var(--color-ai)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff" }}>
+            {user.name.charAt(0).toUpperCase()}
+          </div>
+        ) : (
+          <div style={{ fontSize: 11, fontWeight: 600, color: "var(--color-muted)", background: "var(--color-chip)", padding: "3px 8px", borderRadius: 20 }}>
+            Sign in
+          </div>
+        )}
+      </Link>
+
       {tabs.map((tab) => {
         const active = isActive(tab);
         return (
