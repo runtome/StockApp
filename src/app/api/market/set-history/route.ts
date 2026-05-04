@@ -18,10 +18,11 @@ function syntheticHistory(days: number, base: number): { date: string; close: nu
   const rand = seededRand(seed);
   const values = [base];
   for (let i = 0; i < days; i++) {
-    const r = (rand() - 0.498) * 0.017;   // ~0.85% daily vol, slight up-bias
+    const r = (rand() - 0.5) * 0.018;     // zero-bias — direction varies by seed
     values.push(Math.round((values[values.length - 1] / (1 + r)) * 100) / 100);
   }
   values.reverse();
+  values[values.length - 1] = base;       // pin end exactly to current price
   return values.map((close, i) => {
     const d = new Date(today);
     d.setDate(d.getDate() - (days - i));
