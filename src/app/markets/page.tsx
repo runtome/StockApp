@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/Card";
 import { Chip } from "@/components/ui/Chip";
 import { SparklineChart } from "@/components/charts/SparklineChart";
 import { SectorHeatmap } from "@/components/charts/SectorHeatmap";
+import { SetIndexHero } from "@/components/markets/SetIndexHero";
 import { getMarketSummary } from "@/lib/api/stocks-api";
 import { getStocks } from "@/lib/api/stocks-api";
 import { formatVolume, formatPercent } from "@/lib/utils/format";
@@ -72,7 +73,6 @@ export default async function MarketsPage() {
   const { set_index, advancers, decliners, total_volume, sectors } = summary;
   const validStocks = (stocks as Stock[]).filter((s) => s && typeof s.price === "number" && typeof s.change_pct === "number");
   const topMovers = [...validStocks].sort((a, b) => Math.abs(b.change_pct) - Math.abs(a.change_pct)).slice(0, 6);
-  const setSparkline = Array.from({ length: 20 }, (_, i) => (set_index?.value ?? 0) * (0.985 + i * 0.0008 + Math.sin(i) * 0.002));
 
   return (
     <AppShell>
@@ -85,27 +85,11 @@ export default async function MarketsPage() {
         </div>
 
         {/* SET Index Hero */}
-        <div style={{ margin: "14px 16px 0" }}>
-          <Card style={{ padding: 18 }}>
-            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-              <div>
-                <div style={{ fontSize: 11, color: "var(--color-muted)", fontWeight: 600, letterSpacing: 0.6 }}>SET INDEX</div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 28, fontWeight: 700, marginTop: 2, letterSpacing: -0.5, color: "var(--color-ink)" }}>
-                  {(set_index?.value ?? 0).toFixed(2)}
-                </div>
-              </div>
-              <div style={{ textAlign: "right" }}>
-                <Chip label={`${(set_index?.pct ?? 0) >= 0 ? "+" : ""}${(set_index?.pct ?? 0).toFixed(2)}%`} variant={(set_index?.pct ?? 0) >= 0 ? "up" : "down"} />
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: (set_index?.change ?? 0) >= 0 ? "var(--color-up)" : "var(--color-down)", fontWeight: 600, marginTop: 4 }}>
-                  {(set_index?.change ?? 0) >= 0 ? "+" : ""}{(set_index?.change ?? 0).toFixed(2)}
-                </div>
-              </div>
-            </div>
-            <div style={{ marginTop: 12 }}>
-              <SparklineChart data={setSparkline} width={326} height={48} fill />
-            </div>
-          </Card>
-        </div>
+        <SetIndexHero
+          value={set_index?.value ?? 0}
+          change={set_index?.change ?? 0}
+          pct={set_index?.pct ?? 0}
+        />
 
         {/* Quick Stats */}
         <div style={{ display: "flex", gap: 8, padding: "12px 16px 0" }}>
