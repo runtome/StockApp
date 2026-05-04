@@ -39,7 +39,9 @@ function AiOutlookBanner() {
 }
 
 function StockRow({ stock }: { stock: Stock }) {
-  const isUp = stock.change_pct >= 0;
+  const price = stock.price ?? 0;
+  const changePct = stock.change_pct ?? 0;
+  const isUp = changePct >= 0;
   return (
     <Link href={`/stocks/${stock.symbol}`} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", textDecoration: "none" }}>
       <div style={{ flex: 1 }}>
@@ -48,8 +50,8 @@ function StockRow({ stock }: { stock: Stock }) {
       </div>
       <SparklineChart data={stock.sparkline ?? []} width={56} height={24} />
       <div style={{ textAlign: "right", minWidth: 64 }}>
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 14, fontWeight: 600, color: "var(--color-ink)" }}>{stock.price.toFixed(2)}</div>
-        <Chip label={`${isUp ? "+" : ""}${stock.change_pct.toFixed(2)}%`} variant={isUp ? "up" : "down"} />
+        <div style={{ fontFamily: "var(--font-mono)", fontSize: 14, fontWeight: 600, color: "var(--color-ink)" }}>{price.toFixed(2)}</div>
+        <Chip label={`${isUp ? "+" : ""}${changePct.toFixed(2)}%`} variant={isUp ? "up" : "down"} />
       </div>
     </Link>
   );
@@ -58,8 +60,9 @@ function StockRow({ stock }: { stock: Stock }) {
 export default async function MarketsPage() {
   const [summary, stocks] = await Promise.all([getMarketSummary(), getStocks("")]);
   const { set_index, advancers, decliners, total_volume, sectors } = summary;
-  const topMovers = [...(stocks as Stock[])].sort((a, b) => Math.abs(b.change_pct) - Math.abs(a.change_pct)).slice(0, 6);
-  const setSparkline = Array.from({ length: 20 }, (_, i) => set_index.value * (0.985 + i * 0.0008 + Math.sin(i) * 0.002));
+  const validStocks = (stocks as Stock[]).filter((s) => s && typeof s.price === "number" && typeof s.change_pct === "number");
+  const topMovers = [...validStocks].sort((a, b) => Math.abs(b.change_pct) - Math.abs(a.change_pct)).slice(0, 6);
+  const setSparkline = Array.from({ length: 20 }, (_, i) => (set_index?.value ?? 0) * (0.985 + i * 0.0008 + Math.sin(i) * 0.002));
 
   return (
     <AppShell>
@@ -78,13 +81,13 @@ export default async function MarketsPage() {
               <div>
                 <div style={{ fontSize: 11, color: "var(--color-muted)", fontWeight: 600, letterSpacing: 0.6 }}>SET INDEX</div>
                 <div style={{ fontFamily: "var(--font-mono)", fontSize: 28, fontWeight: 700, marginTop: 2, letterSpacing: -0.5, color: "var(--color-ink)" }}>
-                  {set_index.value.toFixed(2)}
+                  {(set_index?.value ?? 0).toFixed(2)}
                 </div>
               </div>
               <div style={{ textAlign: "right" }}>
-                <Chip label={`${set_index.pct >= 0 ? "+" : ""}${set_index.pct.toFixed(2)}%`} variant={set_index.pct >= 0 ? "up" : "down"} />
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: set_index.change >= 0 ? "var(--color-up)" : "var(--color-down)", fontWeight: 600, marginTop: 4 }}>
-                  {set_index.change >= 0 ? "+" : ""}{set_index.change.toFixed(2)}
+                <Chip label={`${(set_index?.pct ?? 0) >= 0 ? "+" : ""}${(set_index?.pct ?? 0).toFixed(2)}%`} variant={(set_index?.pct ?? 0) >= 0 ? "up" : "down"} />
+                <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: (set_index?.change ?? 0) >= 0 ? "var(--color-up)" : "var(--color-down)", fontWeight: 600, marginTop: 4 }}>
+                  {(set_index?.change ?? 0) >= 0 ? "+" : ""}{(set_index?.change ?? 0).toFixed(2)}
                 </div>
               </div>
             </div>
@@ -121,8 +124,8 @@ export default async function MarketsPage() {
                 <Link key={s.symbol} href={`/stocks/${s.symbol}`} style={{ textDecoration: "none" }}>
                   <div style={{ background: "var(--color-panel)", borderRadius: 10, padding: "10px 12px", border: "1px solid var(--color-hairline)", minWidth: 100, flexShrink: 0 }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-ink)" }}>{s.symbol}</div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--color-ink2)", marginTop: 2 }}>{s.price.toFixed(2)}</div>
-                    <Chip label={`${isUp ? "+" : ""}${s.change_pct.toFixed(2)}%`} variant={isUp ? "up" : "down"} />
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--color-ink2)", marginTop: 2 }}>{(s.price ?? 0).toFixed(2)}</div>
+                    <Chip label={`${isUp ? "+" : ""}${(s.change_pct ?? 0).toFixed(2)}%`} variant={isUp ? "up" : "down"} />
                   </div>
                 </Link>
               );
@@ -140,7 +143,7 @@ export default async function MarketsPage() {
         <div style={{ padding: "16px 0 0" }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-ink)", padding: "0 16px 8px" }}>All Stocks</div>
           <div style={{ background: "var(--color-panel)", borderRadius: 14, margin: "0 16px", border: "1px solid var(--color-hairline)", overflow: "hidden" }}>
-            {(stocks as Stock[]).map((s, i) => (
+            {validStocks.map((s, i) => (
               <div key={s.symbol}>
                 {i > 0 && <div style={{ height: 1, background: "var(--color-hairline2)", margin: "0 16px" }} />}
                 <StockRow stock={s} />
