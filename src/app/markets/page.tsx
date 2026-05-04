@@ -12,15 +12,25 @@ import Link from "next/link";
 
 export const revalidate = 60;
 
+const TZ = "Asia/Bangkok";
+
 function greeting() {
-  const h = new Date().getHours();
+  const h = parseInt(
+    new Intl.DateTimeFormat("en-US", { timeZone: TZ, hour: "numeric", hour12: false }).format(new Date()),
+    10,
+  ) % 24;
   if (h < 12) return "อรุณสวัสดิ์";
   if (h < 17) return "สวัสดีตอนบ่าย";
   return "สวัสดีตอนเย็น";
 }
 
 function dateLabel() {
-  return new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  return new Date().toLocaleDateString("en-US", {
+    timeZone: TZ,
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function AiOutlookBanner() {
