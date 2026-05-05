@@ -7,7 +7,18 @@ import { SparklineChart } from "@/components/charts/SparklineChart";
 import type { Stock } from "@/lib/types/stock";
 import Link from "next/link";
 
-const SECTORS = ["Energy", "Banking", "Transport", "ICT", "Commerce", "Health", "Property", "Food"];
+const SECTORS = [
+  "Energy & Utilities",
+  "Banking",
+  "Transportation & Logistics",
+  "ICT & Telecom",
+  "Commerce",
+  "Health Care Services",
+  "Construction Materials",
+  "Food and Beverage",
+  "Electronic Components",
+  "Hotels, Restaurants & Tourism",
+];
 
 function StockRow({ stock }: { stock: Stock }) {
   const price = stock.price ?? 0;
@@ -81,7 +92,9 @@ export default function SearchPage() {
         {/* Sector chips */}
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
           {SECTORS.map((s) => (
-            <Chip key={s} label={s} onClick={() => setQuery(s)} />
+            <Link key={s} href={`/sectors/${encodeURIComponent(s)}`} style={{ textDecoration: "none" }}>
+              <Chip label={s} />
+            </Link>
           ))}
         </div>
       </div>

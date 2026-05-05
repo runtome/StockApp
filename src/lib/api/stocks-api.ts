@@ -18,10 +18,14 @@ const EMPTY_MARKET_SUMMARY: MarketSummary = {
   sectors: [],
 };
 
-export async function getStocks(q = "") {
-  if (!isHFAvailable()) return searchMockStocks(q);
+export async function getStocks(q = "", sector = "") {
+  if (!isHFAvailable()) return searchMockStocks(q, sector);
   try {
-    const res = await fetchHF(`/stocks${q ? `?q=${encodeURIComponent(q)}` : ""}`);
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (sector) params.set("sector", sector);
+    const qs = params.toString() ? `?${params}` : "";
+    const res = await fetchHF(`/stocks${qs}`);
     if (!res.ok) return [];
     return res.json();
   } catch {
