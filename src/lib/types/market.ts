@@ -18,6 +18,8 @@ export interface SectorData {
 
 export interface MarketSummary {
   set_index: SetIndex;
+  set50_index?: SetIndex;
+  set100_index?: SetIndex;
   advancers: number;
   decliners: number;
   unchanged: number;

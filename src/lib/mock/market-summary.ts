@@ -12,7 +12,9 @@ function seededSparkline(seed: number, length = 20): number[] {
 }
 
 export const MOCK_MARKET_SUMMARY: MarketSummary = {
-  set_index: { value: 1493.69, change: 3.21, pct: 0.22 },
+  set_index:   { value: 1493.69, change:  3.21, pct:  0.22 },
+  set50_index: { value:  972.45, change: -2.82, pct: -0.29 },
+  set100_index:{ value: 1234.56, change: -3.21, pct: -0.26 },
   advancers: 482,
   decliners: 241,
   unchanged: 60,

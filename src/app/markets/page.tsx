@@ -49,7 +49,7 @@ function AiOutlookBanner() {
 
 export default async function MarketsPage() {
   const [summary, stocks] = await Promise.all([getMarketSummary(), getStocks("")]);
-  const { set_index, advancers, decliners, total_volume, sectors } = summary;
+  const { set_index, set50_index, set100_index, advancers, decliners, total_volume, sectors } = summary;
   const validStocks = (stocks as Stock[]).filter((s) => s && typeof s.price === "number" && typeof s.change_pct === "number");
   const topMovers = [...validStocks].sort((a, b) => Math.abs(b.change_pct) - Math.abs(a.change_pct)).slice(0, 6);
 
@@ -63,11 +63,17 @@ export default async function MarketsPage() {
           <div style={{ fontSize: 26, fontWeight: 700, letterSpacing: -0.5, marginTop: 2, color: "var(--color-ink)" }}>Markets · ตลาด</div>
         </div>
 
-        {/* SET Index Hero */}
+        {/* Index carousel — SET, SET50, SET100 */}
         <SetIndexHero
           value={set_index?.value ?? 0}
           change={set_index?.change ?? 0}
           pct={set_index?.pct ?? 0}
+          set50Value={set50_index?.value ?? 0}
+          set50Change={set50_index?.change ?? 0}
+          set50Pct={set50_index?.pct ?? 0}
+          set100Value={set100_index?.value ?? 0}
+          set100Change={set100_index?.change ?? 0}
+          set100Pct={set100_index?.pct ?? 0}
         />
 
         {/* Quick Stats */}
