@@ -4,10 +4,15 @@ const HF = process.env.HF_SPACE_URL;
 
 function hfHeaders(userAuth: string): Record<string, string> {
   const h: Record<string, string> = {};
-  // HF Space access token (for private spaces)
-  if (process.env.HF_SPACE_TOKEN) h["X-HF-Authorization"] = `Bearer ${process.env.HF_SPACE_TOKEN}`;
-  // User JWT forwarded as-is
-  if (userAuth) h["authorization"] = userAuth;
+  if (process.env.HF_SPACE_TOKEN) {
+    // Private Space: HF token must be in Authorization (HF infrastructure checks it first).
+    // User JWT goes in X-User-Authorization so the FastAPI app can read it separately.
+    h["Authorization"] = `Bearer ${process.env.HF_SPACE_TOKEN}`;
+    if (userAuth) h["X-User-Authorization"] = userAuth;
+  } else {
+    // Public Space: user JWT goes directly in Authorization as FastAPI expects.
+    if (userAuth) h["Authorization"] = userAuth;
+  }
   return h;
 }
 

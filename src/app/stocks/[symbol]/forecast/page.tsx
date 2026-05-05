@@ -71,8 +71,11 @@ export default function ForecastPage({ params }: { params: Promise<{ symbol: str
           risk_tolerance: settings.riskTolerance,
         }),
       });
-      setForecast(await res.json());
-    } catch {}
+      if (res.ok) setForecast(await res.json());
+      else setForecast(null);
+    } catch {
+      setForecast(null);
+    }
     setLoading(false);
   }, [sym, activeModel, settings]);
 

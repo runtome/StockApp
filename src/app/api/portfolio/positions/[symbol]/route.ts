@@ -4,8 +4,12 @@ const HF = process.env.HF_SPACE_URL;
 
 function hfHeaders(userAuth: string): Record<string, string> {
   const h: Record<string, string> = {};
-  if (process.env.HF_SPACE_TOKEN) h["X-HF-Authorization"] = `Bearer ${process.env.HF_SPACE_TOKEN}`;
-  if (userAuth) h["authorization"] = userAuth;
+  if (process.env.HF_SPACE_TOKEN) {
+    h["Authorization"] = `Bearer ${process.env.HF_SPACE_TOKEN}`;
+    if (userAuth) h["X-User-Authorization"] = userAuth;
+  } else {
+    if (userAuth) h["Authorization"] = userAuth;
+  }
   return h;
 }
 
