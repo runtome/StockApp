@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import type { IChartApi } from "lightweight-charts";
 
 interface MACDChartProps {
   data: { date: string; macd: number | null; macd_signal: number | null; macd_hist: number | null }[];
@@ -10,12 +11,15 @@ export function MACDChart({ data, height = 80 }: MACDChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current || !data.length) return;
-    let chart: import("lightweight-charts").IChartApi | null = null;
+    const hasData = data.some((d) => d.macd_hist != null || d.macd != null);
+    if (!containerRef.current || !hasData) return;
+
+    let cancelled = false;
+    let chart: IChartApi | null = null;
 
     (async () => {
       const { createChart, ColorType, HistogramSeries, LineSeries } = await import("lightweight-charts");
-      if (!containerRef.current) return;
+      if (cancelled || !containerRef.current) return;
 
       chart = createChart(containerRef.current, {
         width: containerRef.current.clientWidth,
@@ -39,20 +43,38 @@ export function MACDChart({ data, height = 80 }: MACDChartProps) {
           }))
       );
 
-      const macdLine = chart.addSeries(LineSeries, { color: "oklch(0.72 0.16 285)", lineWidth: 1, lastValueVisible: false, priceLineVisible: false });
+      // hex instead of oklch — lightweight-charts' color parser doesn't support oklch
+      const macdLine = chart.addSeries(LineSeries, {
+        color: "#8b5cf6",
+        lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
+      });
       macdLine.setData(
-        data.filter((d) => d.macd != null).map((d) => ({ time: d.date as import("lightweight-charts").Time, value: d.macd as number }))
+        data
+          .filter((d) => d.macd != null)
+          .map((d) => ({ time: d.date as import("lightweight-charts").Time, value: d.macd as number }))
       );
 
-      const signalLine = chart.addSeries(LineSeries, { color: "oklch(0.78 0.14 75)", lineWidth: 1, lastValueVisible: false, priceLineVisible: false });
+      const signalLine = chart.addSeries(LineSeries, {
+        color: "#fbbf24",
+        lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
+      });
       signalLine.setData(
-        data.filter((d) => d.macd_signal != null).map((d) => ({ time: d.date as import("lightweight-charts").Time, value: d.macd_signal as number }))
+        data
+          .filter((d) => d.macd_signal != null)
+          .map((d) => ({ time: d.date as import("lightweight-charts").Time, value: d.macd_signal as number }))
       );
 
       chart.timeScale().fitContent();
     })();
 
-    return () => { chart?.remove(); };
+    return () => {
+      cancelled = true;
+      chart?.remove();
+    };
   }, [data, height]);
 
   return (

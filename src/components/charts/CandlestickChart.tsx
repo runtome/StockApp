@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import type { IChartApi } from "lightweight-charts";
 import type { OHLCV } from "@/lib/types/stock";
 
 interface CandlestickChartProps {
@@ -15,12 +16,14 @@ export function CandlestickChart({ data, ma20, ma50, height = 200 }: Candlestick
   useEffect(() => {
     if (!containerRef.current || !data.length) return;
 
-    let chart: import("lightweight-charts").IChartApi | null = null;
+    let cancelled = false;
+    let chart: IChartApi | null = null;
+    let observer: ResizeObserver | null = null;
 
     (async () => {
-      const lc = await import("lightweight-charts");
-      const { createChart, ColorType, LineStyle, CandlestickSeries, LineSeries } = lc;
-      if (!containerRef.current) return;
+      const { createChart, ColorType, LineStyle, CandlestickSeries, LineSeries } =
+        await import("lightweight-charts");
+      if (cancelled || !containerRef.current) return;
 
       chart = createChart(containerRef.current, {
         width: containerRef.current.clientWidth,
@@ -38,22 +41,20 @@ export function CandlestickChart({ data, ma20, ma50, height = 200 }: Candlestick
           vertLine: { color: "#5C636E", width: 1, style: LineStyle.Dashed },
           horzLine: { color: "#5C636E", width: 1, style: LineStyle.Dashed },
         },
-        rightPriceScale: {
-          borderVisible: false,
-          scaleMargins: { top: 0.1, bottom: 0.1 },
-        },
+        rightPriceScale: { borderVisible: false, scaleMargins: { top: 0.1, bottom: 0.1 } },
         timeScale: { borderVisible: false, barSpacing: 6 },
         handleScroll: true,
         handleScale: true,
       });
 
+      // oklch() is not supported by lightweight-charts' internal color parser — use hex
       const candleSeries = chart.addSeries(CandlestickSeries, {
-        upColor: "oklch(0.74 0.17 145)",
-        downColor: "oklch(0.70 0.20 25)",
-        borderUpColor: "oklch(0.74 0.17 145)",
-        borderDownColor: "oklch(0.70 0.20 25)",
-        wickUpColor: "oklch(0.74 0.17 145)",
-        wickDownColor: "oklch(0.70 0.20 25)",
+        upColor: "#4ade80",
+        downColor: "#f87171",
+        borderUpColor: "#4ade80",
+        borderDownColor: "#f87171",
+        wickUpColor: "#4ade80",
+        wickDownColor: "#f87171",
       });
 
       candleSeries.setData(
@@ -98,8 +99,8 @@ export function CandlestickChart({ data, ma20, ma50, height = 200 }: Candlestick
 
       chart.timeScale().fitContent();
 
-      const observer = new ResizeObserver(() => {
-        if (containerRef.current && chart) {
+      observer = new ResizeObserver(() => {
+        if (containerRef.current && chart && !cancelled) {
           chart.applyOptions({ width: containerRef.current.clientWidth });
         }
       });
@@ -107,6 +108,8 @@ export function CandlestickChart({ data, ma20, ma50, height = 200 }: Candlestick
     })();
 
     return () => {
+      cancelled = true;
+      observer?.disconnect();
       chart?.remove();
     };
   }, [data, ma20, ma50, height]);

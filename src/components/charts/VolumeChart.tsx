@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import type { IChartApi } from "lightweight-charts";
 import type { OHLCV } from "@/lib/types/stock";
 
 interface VolumeChartProps {
@@ -12,11 +13,13 @@ export function VolumeChart({ data, height = 80 }: VolumeChartProps) {
 
   useEffect(() => {
     if (!containerRef.current || !data.length) return;
-    let chart: import("lightweight-charts").IChartApi | null = null;
+
+    let cancelled = false;
+    let chart: IChartApi | null = null;
 
     (async () => {
       const { createChart, ColorType, HistogramSeries } = await import("lightweight-charts");
-      if (!containerRef.current) return;
+      if (cancelled || !containerRef.current) return;
 
       chart = createChart(containerRef.current, {
         width: containerRef.current.clientWidth,
@@ -45,7 +48,10 @@ export function VolumeChart({ data, height = 80 }: VolumeChartProps) {
       chart.timeScale().fitContent();
     })();
 
-    return () => { chart?.remove(); };
+    return () => {
+      cancelled = true;
+      chart?.remove();
+    };
   }, [data, height]);
 
   return <div ref={containerRef} style={{ width: "100%", height }} />;
