@@ -6,7 +6,14 @@ export interface SetIndex {
 
 export interface SectorData {
   name: string;
+  code: string;
   pct: number;
+  count: number;
+  set50_count: number;
+  set100_count: number;
+  sparkline: number[];
+  industry_group: string;
+  industry_group_code: string;
 }
 
 export interface MarketSummary {

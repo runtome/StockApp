@@ -11,13 +11,13 @@ const SECTORS = [
   "Energy & Utilities",
   "Banking",
   "Transportation & Logistics",
-  "ICT & Telecom",
+  "Information & Communication Technology",
   "Commerce",
   "Health Care Services",
   "Construction Materials",
-  "Food and Beverage",
+  "Food & Beverage",
   "Electronic Components",
-  "Hotels, Restaurants & Tourism",
+  "Tourism & Leisure",
 ];
 
 function StockRow({ stock }: { stock: Stock }) {

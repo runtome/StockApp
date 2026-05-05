@@ -3,6 +3,11 @@ export interface Stock {
   name: string;
   name_th: string;
   sector: string;
+  sector_code?: string;
+  industry_group?: string;
+  industry_group_code?: string;
+  is_set50?: boolean;
+  is_set100?: boolean;
   price: number;
   open: number;
   high: number;
