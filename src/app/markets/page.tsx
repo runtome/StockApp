@@ -59,7 +59,7 @@ function StockRow({ stock }: { stock: Stock }) {
         <div style={{ fontSize: 14, fontWeight: 700, color: "var(--color-ink)" }}>{stock.symbol}</div>
         <div style={{ fontSize: 11, color: "var(--color-muted)", marginTop: 1 }}>{stock.sector}</div>
       </div>
-      <SparklineChart data={stock.sparkline ?? []} width={56} height={24} />
+      <SparklineChart data={stock.sparkline ?? []} width={56} height={24} color={isUp ? "var(--color-up)" : "var(--color-down)"} />
       <div style={{ textAlign: "right", minWidth: 64 }}>
         <div style={{ fontFamily: "var(--font-mono)", fontSize: 14, fontWeight: 600, color: "var(--color-ink)" }}>{price.toFixed(2)}</div>
         <Chip label={`${isUp ? "+" : ""}${changePct.toFixed(2)}%`} variant={isUp ? "up" : "down"} />
