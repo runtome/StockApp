@@ -32,20 +32,6 @@ function dateLabel() {
   });
 }
 
-function AiOutlookBanner() {
-  return (
-    <div style={{ margin: "14px 16px 0", padding: "12px 14px", background: "var(--color-ai-bg)", borderRadius: 12, border: "1px solid var(--color-hairline)", display: "flex", alignItems: "center", gap: 10 }}>
-      <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--color-ai)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 2 14.39 8.25 21 9.27l-4.78 4.66L17.27 21 12 17.77 6.73 21l1.05-7.07L3 9.27l6.61-1.02z" /></svg>
-      </div>
-      <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-ai-ink)" }}>Today&apos;s AI Outlook · การคาดการณ์วันนี้</div>
-        <div style={{ fontSize: 11, color: "var(--color-muted)", marginTop: 2 }}>Market shows moderate upside bias. Energy and Transport lead gains.</div>
-      </div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ai)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-    </div>
-  );
-}
 
 export default async function MarketsPage() {
   const [summary, stocks] = await Promise.all([getMarketSummary(), getStocks("")]);
@@ -89,9 +75,6 @@ export default async function MarketsPage() {
             </div>
           ))}
         </div>
-
-        {/* AI Banner */}
-        <AiOutlookBanner />
 
         {/* Top Movers */}
         <div style={{ padding: "16px 16px 0" }}>
